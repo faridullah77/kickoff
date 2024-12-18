@@ -7,46 +7,31 @@ class LeaguesScreen extends StatelessWidget {
     {'name': 'Serie A', 'logo': 'assets/serie_a_logo.png'},
     {'name': 'Bundesliga', 'logo': 'assets/bundesliga_logo.png'},
     {'name': 'Ligue 1', 'logo': 'assets/ligue1_logo.png'},
-    {'name': 'MLS', 'logo': 'assets/mls_logo.png'},
-    {'name': 'Eredivisie', 'logo': 'assets/eredivisie_logo.png'},
-    {'name': 'Primeira Liga', 'logo': 'assets/primeira_liga_logo.png'},
-    {'name': 'Super Lig', 'logo': 'assets/superlig_logo.png'},
-    {'name': 'J-League', 'logo': 'assets/jleague_logo.png'},
-    {'name': 'Brazilian Serie A', 'logo': 'assets/brazilian_serie_a_logo.png'},
-    {'name': 'Russian Premier League', 'logo': 'assets/russian_premier_league_logo.png'},
-    {'name': 'Chinese Super League', 'logo': 'assets/chinese_super_league_logo.png'},
-    {'name': 'Argentine Primera División', 'logo': 'assets/argentine_primeradiv_logo.png'},
-    {'name': 'Indian Super League', 'logo': 'assets/indian_super_league_logo.png'},
-    {'name': 'Turkish Super Lig', 'logo': 'assets/turkish_superlig_logo.png'},
-    {'name': 'Australia A-League', 'logo': 'assets/australia_aleague_logo.png'},
-    {'name': 'South African Premier Division', 'logo': 'assets/southafrican_premierdiv_logo.png'},
   ];
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [Colors.black87, Colors.blueGrey],
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-        ),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Leagues', style: TextStyle(color: Colors.black)),
+        backgroundColor: Colors.green,
       ),
-      child: Column(
+      backgroundColor: Colors.white,
+      body: Column(
         children: [
           Padding(
             padding: EdgeInsets.all(8.0),
             child: TextField(
-              style: TextStyle(color: Colors.white),
+              style: TextStyle(color: Colors.black),
               decoration: InputDecoration(
                 hintText: 'Search Leagues...',
                 hintStyle: TextStyle(color: Colors.grey),
                 prefixIcon: Icon(Icons.search, color: Colors.green),
                 filled: true,
-                fillColor: Colors.black54,
+                fillColor: Colors.white,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide.none,
+                  borderSide: BorderSide(color: Colors.green),
                 ),
               ),
             ),
@@ -63,17 +48,15 @@ class LeaguesScreen extends StatelessWidget {
                   ),
                   title: Text(
                     leagues[index]['name']!,
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(color: Colors.black),
                   ),
-                  onTap: () {
-                    // Navigate to the league details with options
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => LeagueDetailsScreen(leagueName: leagues[index]['name']!),
-                      ),
-                    );
-                  },
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          LeagueTabsScreen(leagueName: leagues[index]['name']!),
+                    ),
+                  ),
                 );
               },
             ),
@@ -84,66 +67,34 @@ class LeaguesScreen extends StatelessWidget {
   }
 }
 
-class LeagueDetailsScreen extends StatelessWidget {
+class LeagueTabsScreen extends StatelessWidget {
   final String leagueName;
 
-  LeagueDetailsScreen({required this.leagueName});
+  LeagueTabsScreen({required this.leagueName});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          '$leagueName Details',
-          style: TextStyle(color: Colors.white),
-        ),
-        backgroundColor: Colors.blueGrey,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-      ),
-      body: Container(
-        padding: EdgeInsets.all(16.0),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Colors.black87, Colors.blueGrey],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
+    return DefaultTabController(
+      length: 4,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('$leagueName', style: TextStyle(color: Colors.black)),
+          backgroundColor: Colors.green,
+          bottom: TabBar(
+            tabs: [
+              Tab(text: 'Table'),
+              Tab(text: 'Fixtures'),
+              Tab(text: 'Stats'),
+              Tab(text: 'Teams'),
+            ],
           ),
         ),
-        child: Column(
+        body: TabBarView(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => PointsTableScreen(leagueName: leagueName),
-                      ),
-                    );
-                  },
-                  child: Text('Standings'),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    // Navigate to Results screen
-                  },
-                  child: Text('Results'),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    // Navigate to Fixtures screen
-                  },
-                  child: Text('Fixtures'),
-                ),
-              ],
-            ),
+            PointsTableScreen(leagueName: leagueName),
+            FixturesScreen(leagueName: leagueName),
+            StatsScreen(leagueName: leagueName),
+            TeamStatsScreen(leagueName: leagueName), // Use TeamStatsScreen here
           ],
         ),
       ),
@@ -158,68 +109,113 @@ class PointsTableScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Here, we will display the points table for the selected league
-    // For simplicity, let's assume a fixed points table format for each league.
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Points Table - $leagueName',
-          style: TextStyle(color: Colors.white),
-        ),
-        backgroundColor: Colors.blueGrey,
-      ),
-      body: Container(
-        padding: EdgeInsets.all(16.0),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Colors.black87, Colors.blueGrey],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
-        ),
-        child: Column(
-          children: [
-            _buildPointsTable(),
-          ],
-        ),
-      ),
+    return Center(
+      child: Text('No data available for $leagueName'),
     );
   }
+}
 
-  Widget _buildPointsTable() {
-    // Sample points table
-    return DataTable(
-      columns: [
-        DataColumn(label: Text('Position', style: TextStyle(color: Colors.white))),
-        DataColumn(label: Text('Club name', style: TextStyle(color: Colors.white))),
-        DataColumn(label: Text('Played', style: TextStyle(color: Colors.white))),
-        DataColumn(label: Text('Won', style: TextStyle(color: Colors.white))),
-        DataColumn(label: Text('Lost', style: TextStyle(color: Colors.white))),
-        DataColumn(label: Text('Drawn', style: TextStyle(color: Colors.white))),
-        DataColumn(label: Text('GD', style: TextStyle(color: Colors.white))),
-        DataColumn(label: Text('Points', style: TextStyle(color: Colors.white))),
-      ],
-      rows: [
-        DataRow(cells: [
-          DataCell(Text('1', style: TextStyle(color: Colors.white))),
-          DataCell(Text('Manchester City', style: TextStyle(color: Colors.white))),
-          DataCell(Text('15', style: TextStyle(color: Colors.white))),
-          DataCell(Text('12', style: TextStyle(color: Colors.white))),
-          DataCell(Text('1', style: TextStyle(color: Colors.white))),
-          DataCell(Text('1', style: TextStyle(color: Colors.white))),
-          DataCell(Text('38', style: TextStyle(color: Colors.white))),
-        ]),
-        DataRow(cells: [
-          DataCell(Text('2', style: TextStyle(color: Colors.white))),
-          DataCell(Text('Liverpool', style: TextStyle(color: Colors.white))),
-          DataCell(Text('15', style: TextStyle(color: Colors.white))),
-          DataCell(Text('11', style: TextStyle(color: Colors.white))),
-          DataCell(Text('3', style: TextStyle(color: Colors.white))),
-          DataCell(Text('1', style: TextStyle(color: Colors.white))),
-          DataCell(Text('36', style: TextStyle(color: Colors.white))),
-        ]),
-        // More rows can be added as needed
-      ],
+class FixturesScreen extends StatelessWidget {
+  final String leagueName;
+
+  FixturesScreen({required this.leagueName});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Text('Fixtures for $leagueName'),
+    );
+  }
+}
+
+class StatsScreen extends StatelessWidget {
+  final String leagueName;
+
+  StatsScreen({required this.leagueName});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Text('Stats for $leagueName'),
+    );
+  }
+}
+
+class TeamStatsScreen extends StatefulWidget {
+  final String leagueName;
+
+  TeamStatsScreen({required this.leagueName});
+
+  @override
+  _TeamStatsScreenState createState() => _TeamStatsScreenState();
+}
+
+class _TeamStatsScreenState extends State<TeamStatsScreen> {
+  final List<String> stats = [
+    'Goals',
+    'GS',
+    'Assists',
+    'Yellow Cards',
+    'Red Cards',
+    'Goal Penalty',
+    'Shots on Target',
+    'Shots',
+    'Offside',
+    'Corners',
+    'Passes',
+  ];
+
+  int selectedStatIndex = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Team Stats'),
+        backgroundColor: Colors.green,
+      ),
+      body: Row(
+        children: [
+          Container(
+            width: 150,
+            color: Colors.grey[200],
+            child: ListView.builder(
+              itemCount: stats.length,
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      selectedStatIndex = index;
+                    });
+                  },
+                  child: Container(
+                    color: selectedStatIndex == index
+                        ? Colors.green
+                        : Colors.transparent,
+                    padding: EdgeInsets.all(12),
+                    child: Text(
+                      stats[index],
+                      style: TextStyle(
+                        color: selectedStatIndex == index
+                            ? Colors.white
+                            : Colors.black,
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+          Expanded(
+            child: Center(
+              child: Text(
+                'Showing data for ${stats[selectedStatIndex]}',
+                style: TextStyle(fontSize: 18),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
