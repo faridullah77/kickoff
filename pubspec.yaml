@@ -23,6 +23,17 @@ dev_dependencies:
 flutter:
   uses-material-design: true
 
-  # Add assets if needed in the future
-  # assets:
-  #   - assets/images/
+  assets:
+    - assets/images/manunited.png  # Add this line to include your logo image
+    - assets/images/chelsea.png  # Add this line to include your logo image
+    - assets/images/arsenal.png  # Add this line to include your logo image
+    - assets/images/astonvilla.png  # Add this line to include your logo image
+    - assets/images/crystalpalace.png  # Add this line to include your logo image
+    - assets/images/everton.png  # Add this line to include your logo image
+    - assets/images/fulham.png  # Add this line to include your logo image
+    - assets/images/liverpool.png  # Add this line to include your logo image
+    - assets/images/mancity.png  # Add this line to include your logo image
+    - assets/images/newcastle.png  # Add this line to include your logo image
+    - assets/images/southampton.png  # Add this line to include your logo image
+    - assets/images/spurs.png  # Add this line to include your logo image
+    - assets/images/westham.png  # Add this line to include your logo image
